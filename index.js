@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const db = require('@cyclic.sh/dynamodb')
 const {loadTFLiteModel} = require('tfjs-tflite-node');
-const tf = require('@tensorflow/tfjs-node')
+const tf = require('@tensorflow/tfjs')
 const Jimp = require('jimp');
 const fs = require('fs')
 
