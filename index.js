@@ -29,9 +29,6 @@ const lineConfig = {
     channelSecret: process.env.LINE_CHANNEL_SECRET
 };
 
-console.log(lineConfig)
-console.log(process.env)
-
 const lineService = new LineService(lineConfig)
 
 app.get("/ping", (req, res) => {
@@ -39,11 +36,14 @@ app.get("/ping", (req, res) => {
 })
 
 app.post("/vision-api", lineService.middleware, async (req, res) => {
-    res.send("HTTP POST request sent to the webhook URL!")
-
-    for(const event of req.body.events){
-        await handleEvent.handleEvent(event)
-    }
+    console.log("Line Vision Api Webhook")
+    try{
+        const result = await Promise.all( req.body.events.map(event => handleEvent.handleEvent(event)) )
+        res.json(result).end()
+    }catch(e){
+        console.error(e)
+        res.send("Happen Error").end()
+    } 
 } )
 
 // Catch all handler for all other request.

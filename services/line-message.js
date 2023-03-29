@@ -22,7 +22,7 @@ class LineService {
             return Promise.resolve(null);
         }
         
-        await this.client.replyMessage(event.replyToken, {
+        return await this.client.replyMessage(event.replyToken, {
             type: 'text',
             text: event.message.text
         });
