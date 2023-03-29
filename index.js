@@ -4,8 +4,8 @@ const db = require('@cyclic.sh/dynamodb')
 
 const LineService = require("./services/line-message")
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+//app.use(express.json())
+//app.use(express.urlencoded({ extended: true }))
 
 
 // #############################################################################
