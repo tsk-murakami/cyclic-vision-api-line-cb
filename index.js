@@ -38,7 +38,7 @@ app.get("/ping", (req, res) => {
 app.post("/vision-api", lineService.middleware, async (req, res) => {
     console.log("Line Vision Api Webhook")
     try{
-        const result = await Promise.all( req.body.events.map(event => handleEvent.handleEvent(event)) )
+        const result = await Promise.all( req.body.events.map(event => lineService.handleEvent(event)) )
         res.json(result).end()
     }catch(e){
         console.error(e)
