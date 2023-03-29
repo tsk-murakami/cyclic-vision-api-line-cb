@@ -29,6 +29,9 @@ const lineConfig = {
     channelSecret: process.env.LINE_CHANNEL_SECRET
 };
 
+console.log(lineConfig)
+console.log(process.env)
+
 const lineService = new LineService(lineConfig)
 
 app.get("/ping", (req, res) => {
