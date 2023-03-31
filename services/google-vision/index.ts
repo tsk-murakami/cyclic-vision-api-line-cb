@@ -1,23 +1,49 @@
 
-const vision = require('@google-cloud/vision');
+import vision, { ImageAnnotatorClient } from '@google-cloud/vision';
+import awsSdk from "aws-sdk"
 
-/*
-interface IOptions {
+import { IGoogleVision, VisionRequestData } from "./interface";
+
+export interface IGoogleVisionFromJsonConfig {
+  type: "s3"
+  s3Service: {
+    bucketName: string;
+    jsonPath: string;
+  }
+}
+
+export interface IGoogleVisionConfig {
     credentials: {
         client_email: string;
         private_key: string;
     }
     projectId: string
 }
-*/
 
-class GoogleVision {
-    constructor(options){
-        this.client = new vision.ImageAnnotatorClient(options);
+class GoogleVision implements IGoogleVision {
+    client: ImageAnnotatorClient
+    constructor(options: IGoogleVisionConfig){
+        this.client = new vision.ImageAnnotatorClient({ credentials: options.credentials, projectId: options.projectId });
     }
-    async webDetection(requestData){
+    inject(services: {}): void {
+        /** nothing dependencies services */
+    }
+
+    static async from_json(config: IGoogleVisionFromJsonConfig){
+
+      const s3 = new awsSdk.S3()
+      const jsonStr = await s3.getObject({
+          Bucket: config.s3Service.bucketName,
+          Key: config.s3Service.jsonPath,
+      }).promise()
+      const jsonData = JSON.parse(jsonStr.Body!.toString())
+      return new GoogleVision(jsonData)
+    }
+
+    async webDetection(requestData: VisionRequestData){
         const [result] = await this.client.webDetection(requestData);
         const webDetection = result.webDetection;
+        /*
         if (webDetection.fullMatchingImages.length) {
             console.log(
               `Full matches found: ${webDetection.fullMatchingImages.length}`
@@ -45,7 +71,8 @@ class GoogleVision {
               console.log(`  Score: ${webEntity.score}`);
             });
         }
+      */
     }
 }
 
-module.exports = GoogleVision
+export default GoogleVision
