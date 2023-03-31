@@ -1,5 +1,6 @@
 
 const lineSdk = require('@line/bot-sdk');
+const { ServiceNames } = require("./service-names")
 
 /*
 interface ILineConfig {
@@ -9,12 +10,17 @@ interface ILineConfig {
 */
 
 class LineService {
+
     constructor(config /* ILineConfig*/ ){
         this.client = new lineSdk.Client(config);
         this.config = config
     }
     get middleware(){
         return lineSdk.middleware(this.config)
+    }
+
+    inject(services){
+        this.googleVision = services[ServiceNames.googleVision]
     }
 
     async handleEvent(event){

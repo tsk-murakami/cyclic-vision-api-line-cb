@@ -1,8 +1,11 @@
-const express = require('express')
+
+import express from "express"
 const app = express()
 
+/*
 const LineService = require("./services/line-message")
 const GoogleVisionService = require("./services/google-vision")
+*/
 
 //app.use(express.json())
 //app.use(express.urlencoded({ extended: true }))
@@ -29,14 +32,15 @@ const lineConfig = {
     channelSecret: process.env.LINE_CHANNEL_SECRET
 };
 
-const lineService = new LineService(lineConfig)
-const visionService = new GoogleVisionService()
+//const lineService = new LineService(lineConfig)
+//const visionService = new GoogleVisionService()
 
 
-app.get("/ping", (req, res) => {
-    return res.send("OK").end()
+app.get("/hello", (req, res) => {
+    return res.send("Hello").end()
 })
 
+/*
 app.post("/vision-api", lineService.middleware, async (req, res) => {
     console.log("Line Vision Api Webhook")
     try{
@@ -51,6 +55,7 @@ app.post("/vision-api", lineService.middleware, async (req, res) => {
 app.post("/admin/vision-api", async(req, res) => {
 
 })
+*/
 
 // Catch all handler for all other request.
 app.use('*', (req, res) => {
